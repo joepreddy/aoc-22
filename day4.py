@@ -1,12 +1,22 @@
 from utils import readfile_strip
 
-def total_overlapping_pairs(file):
+def total_enclosing_pairs(file):
     total = 0
     lines = readfile_strip(file)
     for line in lines:
         pair = line.split(",")
         range1, range2 = convert_assignment_to_range(pair[0]), convert_assignment_to_range(pair[1])
         if is_range_within_range(range1, range2):
+            total += 1
+    return total
+
+def total_overlapping_pairs(file):
+    total = 0
+    lines = readfile_strip(file)
+    for line in lines:
+        pair = line.split(",")
+        range1, range2 = convert_assignment_to_range(pair[0]), convert_assignment_to_range(pair[1])
+        if do_ranges_overlap(range1, range2):
             total += 1
     return total
 
@@ -24,4 +34,8 @@ def is_range_within_range(range1, range2):
             return True
     return ((range1.start in range2 and range1[-1] in range2) or (range2.start in range1 and range2[-1] in range1))
 
+def do_ranges_overlap(range1, range2):
+    return max(range1.start, range2.start) <= min(range1[-1], range2[-1])
+
+print(total_enclosing_pairs('inputs/day4.txt'))
 print(total_overlapping_pairs('inputs/day4.txt'))
